@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                         http://www.springframework.org/schema/beans/spring-beans.xsd
+        				http://www.springframework.org/schema/mvc
+                         http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        				http://code.alibabatech.com/schema/dubbo
+                         http://code.alibabatech.com/schema/dubbo/dubbo.xsd
+        				http://www.springframework.org/schema/context
+                         http://www.springframework.org/schema/context/spring-context.xsd">
+
+    <!--Jedis连接池的相关配置-->
+    <bean id="jedisPoolConfig" class="redis.clients.jedis.JedisPoolConfig">
+        <property name="maxTotal"> <!--最大连接数-->
+            <value>200</value>
+        </property>
+        <property name="maxIdle"> <!--最大空闲数,连接的最大空闲时间-->
+            <value>50</value>
+        </property>
+        <!--当调用borrow Object（使用重复连接）方法时，是否进行有效性检查，当从连接池拿出一个连接，会判断是否可用，可用：直接用，不可用：丢弃，重新创建  true:进行，false:不进行-->
+        <property name="testOnBorrow" value="true"/>
+        <!--当调用return Object（返回连接）方法时，是否进行有效性检查  -->
+        <property name="testOnReturn" value="true"/>
+
+        <!-- testOnBorrow和testOnReturn在生产环境一般是不开启的，影响性能-->
+    </bean>
+
+    <bean id="jedisPool" class="redis.clients.jedis.JedisPool">
+        <constructor-arg name="poolConfig" ref="jedisPoolConfig" /><!--连接池-->
+        <constructor-arg name="host" value="127.0.0.1" /><!--主机地址-->
+        <constructor-arg name="port" value="6379" type="int" /><!--端口-->
+        <constructor-arg name="timeout" value="30000" type="int" /><!--超时时间-->
+    </bean>
+</beans>

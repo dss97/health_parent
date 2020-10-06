@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dou.dao.SetmealDao">
+    <!--多对多查询设置-->
+    <resultMap id="baseResultMap" type="com.dou.pojo.Setmeal">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="code" property="code"/>
+        <result column="helpCode" property="helpCode"/>
+        <result column="sex" property="sex"/>
+        <result column="age" property="age"/>
+        <result column="price" property="price"/>
+        <result column="remark" property="remark"/>
+        <result column="attention" property="attention"/>
+        <result column="img" property="img"/>
+    </resultMap>
+
+    <resultMap id="findByIdResultMap" type="com.dou.pojo.Setmeal" extends="baseResultMap">
+        <!--多对多映射-->
+        <collection
+                property="checkGroups"
+                ofType="com.dou.pojo.CheckGroup"
+                select="com.dou.dao.CheckGroupDao.findCheckGroupById"
+                column="id">
+        </collection>
+    </resultMap>
+
+
+    <insert id="add" parameterType="com.dou.pojo.Setmeal" >
+     <!--通过mybatis框架提供的selectKey标签获得自增产生的id值-->
+        <selectKey resultType="_integer" order="AFTER" keyProperty="id">
+          select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_setmeal(code,name,sex,helpCode,remark,attention,age,price,img)
+        values
+        (#{code},#{name},#{sex},#{helpCode},#{remark},#{attention},#{age},#{price},#{img})
+    </insert>
+
+    <insert id="setSetmealAndCheckGroup" parameterType="map">
+      insert into t_setmeal_checkgroup(setmeal_id,checkgroup_id)
+      values
+      (#{setmealId},#{checkgroupId})
+    </insert>
+    
+    <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.Setmeal">
+        select * from t_setmeal
+        <if test="value !=null and value !='' and value.length>0">
+            where code =#{value} or name =#{value} or helpCode=#{helpCode}
+        </if>
+    </select>
+    <!--更新表单基础数据-->
+    <update id="edit" parameterType="com.dou.pojo.Setmeal">
+        update t_setmeal
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="code != null">
+                code = #{code},
+            </if>
+            <if test="helpCode != null">
+                helpCode = #{helpCode},
+            </if>
+            <if test="sex != null">
+                sex = #{sex},
+            </if>
+            <if test="age != null">
+                age = #{age},
+            </if>
+            <if test="price != null">
+                price = #{price},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="attention != null">
+                attention = #{attention},
+            </if>
+            <if test="img != null">
+                img = #{img},
+            </if>
+        </set>
+         where id=#{id}
+    </update>
+<!--根据id删除关联数据-->
+    <delete id="deleteAssoication" parameterType="int">
+        delete from t_setmeal_checkgroup  where setmeal_id=#{id}
+    </delete>
+
+   <!-- //删除套餐组-->
+    <delete id="delete">
+        delete from  t_setmeal where id=#{id}
+    </delete>
+
+    <select id="findById" parameterType="int" resultType="com.dou.pojo.Setmeal">
+        select * from t_setmeal where id=#{id}
+    </select>
+
+    <!--查询多对多关系表-->
+    <select id="findsetmealIdsByCheckGroupId" parameterType="int" resultType="java.lang.Integer">
+        select checkgroup_id from t_setmeal_checkgroup where setmeal_id=#{id}
+    </select>
+
+    <select id="findAll"  resultType="com.dou.pojo.Setmeal">
+     select * from t_setmeal
+    </select>
+
+    <!--移动端查询-->
+    <select id="findByIdmobile" parameterType="int" resultMap="findByIdResultMap">
+        select * from t_setmeal where id=#{id}
+    </select>
+
+    <!--搜索套餐预约数量  group by 建议对s.id处理，避免名称重复-->
+    <select id="findSetmealCount" resultType="map">
+    SELECT s.name,COUNT(o.id) value
+    FROM t_setmeal s LEFT JOIN t_order o ON s.id = o.setmeal_id
+    GROUP BY s.id
+    </select>
+
+</mapper>
