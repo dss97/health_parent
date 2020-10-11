@@ -35,7 +35,7 @@
         update t_checkitem
         <set>
             <if test="name != null">
-                name = #{name},
+                name= #{name},
             </if>
             <if test="sex != null">
                 sex = #{sex},

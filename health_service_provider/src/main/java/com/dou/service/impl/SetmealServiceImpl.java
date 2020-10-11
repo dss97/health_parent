@@ -128,7 +128,7 @@ public  class SetmealServiceImpl implements SetmealService{
         setmealDao.deleteAssoication(setmeal.getId());
         //然后再根据id建立新的链接
         Integer setmealId = setmeal.getId();
-        setSetmealAndCheckGroup(setmealId, checkgroupIds);
+        this.setSetmealAndCheckGroup(setmealId, checkgroupIds);
     }
 
     //根据id删除套餐组

@@ -26,5 +26,5 @@ public interface CheckGroupDao {
 
    public List<CheckGroup> findAll();
 
-   public List<CheckGroup> findBySetmealId(Integer id);
+
 }

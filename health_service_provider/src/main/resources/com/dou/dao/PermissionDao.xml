@@ -10,4 +10,46 @@
      FROM t_permission p,t_role_permission rp
      WHERE p.id=rp.permission_id AND rp.role_id=#{roleId}
     </select>
+    <!--查询全部权限信息-->
+    <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.Permission">
+        select * from t_permission
+        <if test="value !=null and value !='' and value.length>0">
+            where name like concat('%',#{value},'%') or keyword like concat('%',#{value},'%') or description like concat('%',#{value},'%')
+        </if>
+    </select>
+    <!--回显权限信息-->
+    <select id="findById" parameterType="int" resultType="com.dou.pojo.Permission">
+        select * from t_permission where id=#{id}
+    </select>
+    <!--添加权限-->
+    <insert id="add" parameterType="com.dou.pojo.Permission">
+        <!--通过mybatis框架提供的selectKey标签获得自增产生的ID值-->
+        <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_permission(name,keyword,description)
+        values
+        (#{name},#{keyword},#{description})
+    </insert>
+    <!--编辑权限-->
+    <update id="edit" parameterType="com.dou.pojo.Permission">
+        update t_permission
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+    <!--删除权限-->
+    <delete id="delete" parameterType="int">
+        delete from t_permission where id=#{id}
+    </delete>
+
 </mapper>

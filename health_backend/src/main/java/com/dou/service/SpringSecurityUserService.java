@@ -9,8 +9,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.codec.Utf8;
 import org.springframework.stereotype.Component;
 
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -21,9 +25,11 @@ public class SpringSecurityUserService implements UserDetailsService {
     @Reference
     private UserService userService;
 
+
     //根据用户名查询数据库获取用户信息
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        System.out.println(username);
         User user = userService.findByUsername(username);
         if(user == null){
             //用户名不存在

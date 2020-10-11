@@ -7,4 +7,75 @@
     <select id="findByUserId" parameterType="string" resultType="com.dou.pojo.User">
         select  * from t_user where username=#{username}
     </select>
+    <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.User">
+        select * from t_user
+        <if test="value !=null and value !='' and value.length>0">
+            where username like concat('%',#{value},'%') or telephone like concat('%',#{value},'%') or remark like concat('%',#{value},'%') or station like concat('%',#{value},'%') or id=#{value}
+        </if>
+    </select>
+    <select id="findAll" resultType="com.dou.pojo.Role">
+        select * from t_role
+    </select>
+
+    <select id="findById" parameterType="int" resultType="com.dou.pojo.User">
+        select * from t_user where id=#{id}
+    </select>
+
+    <select id="findCheckItemIdsByUserId" parameterType="int" resultType="java.lang.Integer">
+        select role_id from t_user_role where user_id=#{id}
+    </select>
+    <!--添加用户-->
+    <insert id="add" parameterType="com.dou.pojo.User">
+        <!--通过mybatis框架提供的selectKey标签获得自增产生的id值-->
+        <selectKey resultType="_integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_user(birthday,gender,username,password,remark,station,telephone)
+        values
+        (#{birthday},#{gender},#{username},#{password},#{remark},#{station},#{telephone})
+    </insert>
+    <!--再建立连接-->
+    <insert id="setUserAndCheckitemIds" parameterType="map">
+        insert  into t_user_role(user_id,role_id)
+        values
+        (#{userId},#{checkitemId})
+    </insert>
+
+    <!--编辑用户信息-->
+    <update id="edit" parameterType="com.dou.pojo.User">
+        update t_user
+        <set>
+            <if test="birthday != null">
+                birthday = #{birthday},
+            </if>
+            <if test="gender != null">
+                gender = #{gender},
+            </if>
+            <if test="username != null">
+                username = #{username},
+            </if>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="remark != null">
+                remark = #{remark},
+            </if>
+            <if test="station != null">
+                station = #{station},
+            </if>
+            <if test="telephone != null">
+                telephone = #{telephone},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <!--先删除连接-->
+    <delete id="deleteAssoication" parameterType="int">
+        delete from t_user_role where user_id=#{userId}
+    </delete>
+    <!--再删除用户-->
+    <delete id="delete" parameterType="int">
+        delete from t_user where id=#{id}
+    </delete>
 </mapper>

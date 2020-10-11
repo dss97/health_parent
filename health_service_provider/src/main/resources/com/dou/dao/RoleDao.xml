@@ -10,4 +10,57 @@
      FROM t_role r,t_user_role ur
      WHERE r.id=ur.role_id AND ur.user_id=#{userId}
     </select>
+
+    <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.Role">
+        select * from t_role
+        <if test="value !=null and value !='' and value.length>0">
+            where name like concat('%',#{value},'%') or keyword like concat('%',#{value},'%') or description like concat('%',#{value},'%')
+        </if>
+    </select>
+
+    <select id="findmenuAll" resultType="com.dou.pojo.Menu">
+      select * from  t_menu
+    </select>
+
+    <select id="findpermissionAll" resultType="com.dou.pojo.Permission">
+        select * from t_permission
+    </select>
+
+    <select id="findByroleId" parameterType="string" resultType="com.dou.pojo.Role">
+        select  * from t_role where name=#{name}
+    </select>
+
+    <insert id="add" parameterType="com.dou.pojo.Role">
+        <!--通过mybatis框架提供的selectKey标签获得自增产生的id值-->
+        <selectKey resultType="_integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_role(name ,keyword,description)
+        values
+        (#{name},#{keyword},#{description})
+    </insert>
+
+    <insert id="setRoleAndMenucheckitemIds" parameterType="map">
+        insert into t_role_menu(role_id,menu_id)
+        values
+        (#{roleId},#{menucheckitemId})
+    </insert>
+
+    <insert id="setRoleAndPermissioncheckitemIds" parameterType="map">
+        insert into t_role_permission(role_id,permission_id)
+        values
+        (#{roleId},#{permissioncheckitemId})
+    </insert>
+
+    <select id="findById" parameterType="int" resultType="com.dou.pojo.Role">
+        select * from t_role where id=#{id}
+    </select>
+
+    <select id="findMenuCheckItemIdsByRoleId" parameterType="int" resultType="java.lang.Integer">
+        select menu_id from t_role_menu where role_id=#{id}
+    </select>
+
+    <select id="findPerssionCheckItemIdsByRoleId" parameterType="int" resultType="java.lang.Integer">
+        select permission_id from t_role_permission where role_id=#{id}
+    </select>
 </mapper>
