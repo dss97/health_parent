@@ -28,7 +28,7 @@
             font-size: 14px;
             color: rgb(96, 98, 102);
             overflow: hidden;
-            flex: 1 1 0%;
+            flex: 110%;
         }
 
         .datatable td, .datatable th {
@@ -450,8 +450,7 @@
             },
 			//获取选中行的数据
             handleSelectionChange(val) {
-
-                axios.post("/user/finduserAll.do",val).then((res)=>{
+                axios.post("/role/findroleAll.do",val).then((res)=>{
                     if (res.data.flag){
                         multipleSelection=res.data.data;
                     } else {
@@ -461,9 +460,8 @@
             },
 			//批量删除
             handleDelAll(){
-                alert(multipleSelection);
                 //发送ajax请求
-                axios.post("/user/deleteAll.do",multipleSelection).then((res)=>{
+                axios.post("/role/deleteAll.do",multipleSelection).then((res)=>{
                     if (res.data.flag){
                         this.findPage();
                         this.$message.success(res.data.message);
@@ -475,7 +473,7 @@
             // 删除
             handleDelete(row) {
                 //发送ajax请求
-                axios.post("/user/delete.do?id="+row.id).then((res)=>{
+                axios.post("/role/delete.do?id="+row.id).then((res)=>{
                     if (res.data.flag){
                         this.findPage();
                         this.$message.success(res.data.message);

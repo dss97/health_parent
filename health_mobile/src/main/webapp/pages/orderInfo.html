@@ -179,7 +179,7 @@
                     axios.post("/setmeal/findByIdmobile.do?id=" + id).then((res) => {
                         if(res.data.flag){
                             this.setmeal = res.data.data;
-                            this.imgUrl = 'http://qguv41hga.hd-bkt.clouddn.com/' + this.setmeal.img;
+                            this.imgUrl = 'http://qguv41hga.hd-bkt.clouddn.com/'+this.setmeal.img;
                         }
                     });
                 }

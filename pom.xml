@@ -16,7 +16,6 @@
         <module>health_backend</module>
         <module>health_jobs</module>
         <module>health_mobile</module>
-        <module>../../freemarkerdemo</module>
         <module>jasperReportsdemo</module>
     </modules>
 

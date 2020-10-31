@@ -25,4 +25,8 @@ public interface RoleService {
     public List<Integer> findMenuCheckItemIdsByRoleId(Integer id);
     //回显权限
     public List<Integer> findPerssionCheckItemIdsByRoleId(Integer id);
+    //单个删除角色
+    public void delete(Integer id);
+    //编辑角色和关联项
+    public void edit(Role role, Integer[] menucheckitemIds, Integer[] permissioncheckitemIds);
 }

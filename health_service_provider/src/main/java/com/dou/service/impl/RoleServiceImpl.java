@@ -71,6 +71,18 @@ public class RoleServiceImpl implements RoleService{
         this.setRoleAndPermissioncheckitemIds(roleId, permissioncheckitemIds);
     }
 
+    //编辑角色
+    @Override
+    public void edit(Role role, Integer[] menucheckitemIds, Integer[] permissioncheckitemIds) {
+        Integer roleId = role.getId();
+        roleDao.deleteMenuAssoication(roleId);
+        roleDao.deletePermissionAssoication(roleId);
+        roleDao.edit(role);
+        this.setRoleAndMenucheckitemIds(roleId, menucheckitemIds);
+        this.setRoleAndPermissioncheckitemIds(roleId, permissioncheckitemIds);
+
+    }
+
     @Override
     public Role findById(Integer id) {
         return roleDao.findById(id);
@@ -90,6 +102,18 @@ public class RoleServiceImpl implements RoleService{
         System.out.println(id);
         System.out.println(perssionCheckItemIdsByRoleIds);
         return perssionCheckItemIdsByRoleIds;
+    }
+
+    @Override
+    public void delete(Integer id) {
+        try {
+            roleDao.deleteMenuAssoication(id);
+            roleDao.deletePermissionAssoication(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        roleDao.delete(id);
     }
 
     //与菜单关联项

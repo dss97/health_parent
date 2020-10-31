@@ -43,7 +43,44 @@
 
         <!--配置多种规则,可以进行权限管理-->
         <!--只要认证通过就可以访问-->
-        <security:intercept-url pattern="/pages/**"  access="isAuthenticated()"/>
+        <!--<security:intercept-url pattern="/pages/**"  access="isAuthenticated()"/>-->
+        <security:intercept-url pattern="/pages/main.html"  access="isAuthenticated()"/>
+        <!--<security:intercept-url pattern="/pages/**" access="hasRole('ROLE_ADMIN')"/>-->
+        <!--会员档案-->
+        <security:intercept-url pattern="/pages/member.html" access="hasAnyRole('ROLE_ADMIN','ROLE_HEALTH_MANAGER')"/>
+        <!--体检上传-->
+        <security:intercept-url pattern="/pages/examination.html" access="hasAnyRole('ROLE_ADMIN','ROLE_HEALTH_MANAGER')"/>
+        <!--会员统计-->
+        <security:intercept-url pattern="/pages/statistics.html" access="hasAnyRole('ROLE_ADMIN','ROLE_HEALTH_MANAGER')"/>
+        <!--预约列表-->
+        <security:intercept-url pattern="/pages/ordersettinglist.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--预约设置-->
+        <security:intercept-url pattern="/pages/ordersetting.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--套餐管理-->
+        <security:intercept-url pattern="/pages/setmeal.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--检查组管理-->
+        <security:intercept-url pattern="/pages/checkgroup.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--检查项管理-->
+        <security:intercept-url pattern="/pages/checkitem.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--中医体质辨别-->
+        <security:intercept-url pattern="/pages/doctor.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--会员数量-->
+        <security:intercept-url pattern="/pages/report_member.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--套餐占比-->
+        <security:intercept-url pattern="/pages/report_setmeal.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--运营数据-->
+        <security:intercept-url pattern="/pages/report_business.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--菜单管理-->
+        <security:intercept-url pattern="/pages/menu.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--权限管理-->
+        <security:intercept-url pattern="/pages/permission.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--角色管理-->
+        <security:intercept-url pattern="/pages/role.html" access="hasAnyRole('ROLE_ADMIN')"/>
+        <!--用户管理-->
+        <security:intercept-url pattern="/pages/user.html" access="hasAnyRole('ROLE_ADMIN')"/>
+
+
+
         <!--&lt;!&ndash;拥有add权限就可以访问b.html页面&ndash;&gt;
         <security:intercept-url pattern="/pages/b.html"  access="hasAuthority('add')" />
 

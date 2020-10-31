@@ -65,7 +65,6 @@ public class OrderSettingServiceImpl implements OrderSettingService {
         Date orderDate = orderSetting.getOrderDate();
         //根据日期查询是否已经进行了预约设置
         long count = orderSettingDao.findCountByOrderDate(orderDate);
-        if (count > 0) {
             //判定已经预约的数量
             if (count > 0) {
                 Integer reservations = orderSettingDao.findCountByOrderReservations(orderDate);
@@ -79,7 +78,6 @@ public class OrderSettingServiceImpl implements OrderSettingService {
                 //当前日期没有就那些预约设置，需要执行插入操作
                 orderSettingDao.add(orderSetting);
             }
-        }
         return true;
     }
 }

@@ -31,4 +31,12 @@ public interface RoleDao {
     public List<Integer> findMenuCheckItemIdsByRoleId(Integer id);
 //回显权限信息
     public List<Integer> findPerssionCheckItemIdsByRoleId(Integer id);
+//删除菜单关联
+    public void deleteMenuAssoication(Integer id);
+//删除权限关联
+    public void deletePermissionAssoication(Integer id);
+//删除角色
+    public void delete(Integer id);
+//编辑角色
+    public void edit(Role role);
 }

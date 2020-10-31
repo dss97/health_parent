@@ -2,6 +2,7 @@ package com.dou.controller;
 
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSONArray;
 import com.dou.constant.MessageConstant;
 import com.dou.entity.PageResult;
 import com.dou.entity.QueryPageBean;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -80,6 +83,17 @@ public class RoleController {
         }
         return new Result(true, MessageConstant.ADD_ROLE_SUCCESS);
     }
+    //编辑用户
+    @RequestMapping("/edit")
+    public Result edit(@RequestBody Role role, Integer[] menucheckitemIds,Integer[] permissioncheckitemIds){
+        try {
+            roleService.edit(role,menucheckitemIds,permissioncheckitemIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,MessageConstant.EDIT_ROLE_FAIL);
+        }
+        return new Result(true, MessageConstant.EDIT_ROLE_SUCCESS);
+    }
     //回显角色
     @RequestMapping("/findById")
     public Result findById(Integer id){
@@ -102,7 +116,7 @@ public class RoleController {
             return new Result(false, MessageConstant.GET_MENUINFO_FAIL);
         }
     }
-    //回显菜单
+    //回显权限
     @RequestMapping("/findPerssionCheckItemIdsByUserId")
     public Result findPerssionCheckItemIdsByUserId(Integer id){
         try {
@@ -113,4 +127,46 @@ public class RoleController {
             return new Result(false, MessageConstant.GET_PERMISSION_FAIL);
         }
     }
+    //单个删除
+    @RequestMapping("/delete")
+    public Result delete(Integer id){
+        try {
+            roleService.delete(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.DELETE_ROLE_FAIL+"可能存在关联项");
+        }
+        return new Result(true, MessageConstant.DELETE_ROLE_SUCCESS);
+    }
+
+    //批量删除--涉及的json数据转码
+    @RequestMapping("/findroleAll")
+    public Result findroleAll(@RequestBody String json){
+        List<Role> roles = new ArrayList<Role>(JSONArray.parseArray(json, Role.class));
+        HashSet<Integer> roleIds=new HashSet<>();
+
+        try {
+            for (Role role : roles) {
+                roleIds.add(role.getId());
+            }
+            return new Result(true, MessageConstant.GET_ROLEINFO_SUCCESS,roleIds);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, MessageConstant.GET_ROLEINFO_FAIL);
+        }
+    }
+    //批量删除
+    @RequestMapping("/deleteAll")
+    public Result deleteAll(@RequestBody HashSet<Integer> roleIds){
+        for (Integer roleId : roleIds) {
+            try {
+                roleService.delete(roleId);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return new Result(false, MessageConstant.DELETE_ROLE_FAIL);
+            }
+        }
+        return new Result(true, MessageConstant.DELETE_ROLE_SUCCESS);
+    }
+
 }

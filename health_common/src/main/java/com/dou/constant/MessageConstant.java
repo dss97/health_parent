@@ -110,4 +110,11 @@ public class MessageConstant {
     public static final String EDIT_PERMISSION_SUCCESS = "编辑权限成功";
     public static final String DELETE_PERMISSION_FAIL = "删除权限失败";
     public static final String DELETE_PERMISSION_SUCCESS = "删除权限成功";
+    public static final String ADD_ORDER_SUCCESS = "添加预约成功";
+    public static final String ADD_ORDER_FAIL = "添加预约失败";
+    public static final String EDIT_ORDER_FAIL = "编辑预约失败";
+    public static final String EDIT_ORDER_SUCCESS = "编辑预约成功";
+    public static final String DELETE_ORDER_FAIL = "删除预约失败";
+    public static final String DELETE_ORDER_SUCCESS = "删除预约成功";
+
 }

@@ -137,11 +137,24 @@
                                 </el-form-item>
                             </el-col>
                             <el-col :span="12">
-                                <el-form-item label="等级" prop="level">
+                                <!--<el-form-item label="等级" prop="level">
                                     <el-select v-model="formData.level">
                                         <el-option label="1" value="1"></el-option>
                                         <el-option label="2" value="2"></el-option>
                                         <el-option label="3" value="3"></el-option>
+                                    </el-select>
+                                </el-form-item>-->
+                                <el-form-item label="示例">
+                                    <el-select v-model="formData.demo">
+                                        <el-option-group label="热门餐">
+                                            <el-option label="炸串夹饼" value="4"></el-option>
+                                            <el-option label="煎饼果子"  value="5" ></el-option>
+                                        </el-option-group>
+                                        <el-option-group label="一般餐">
+                                            <el-option label="燕奶粥" value="1"></el-option>
+                                            <el-option label="手抓饼"  value="2" ></el-option>
+                                            <el-option label="炸鸡柳" value="3" ></el-option>
+                                        </el-option-group>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
@@ -150,8 +163,11 @@
                         <el-row>
                             <el-col :span="12">
                                 <el-form-item label="跟随菜单">
-                                    <el-select v-model="formData.parentMenuId" placeholder="请选择主菜单">
-                                        <el-option v-for="menu in menus" :key="menu.id" :label="menu.name" :value="menu.id"></el-option>
+                                    <el-select v-model="formData.parentMenuId" placeholder="请选择主菜单" filterable  remote  default-first-option no-match-text="无搜索项,重新搜索">
+                                        <el-option v-for="menu in menus" :key="menu.id" :label="menu.name" :value="menu.id">
+                                            <span style="float: left">{{ menu.name }}</span>
+                                            <span style="float: right">{{ menu.path }}</span>
+                                        </el-option>
                                     </el-select>
                                 </el-form-item>
                             </el-col>
@@ -215,7 +231,7 @@
                                 </el-col>
                                 <el-col :span="12">
                                     <el-form-item label="等级" prop="level">
-                                        <el-select v-model="formData.level">
+                                        <el-select v-model="formData.level" clearable>
                                             <el-option label="1" value="1"></el-option>
                                             <el-option label="2" value="2"></el-option>
                                             <el-option label="3" value="3"></el-option>
@@ -227,7 +243,7 @@
                             <el-row>
                                 <el-col :span="12">
                                     <el-form-item label="跟随菜单">
-                                        <el-select v-model="formData.parentMenuId" placeholder="请选择主菜单">
+                                        <el-select v-model="formData.parentMenuId" placeholder="请选择主菜单"   clearable>
                                             <el-option v-for="menu in menus" :key="menu.id" :label="menu.name" :value="menu.id"></el-option>
                                         </el-select>
                                     </el-form-item>

@@ -2,12 +2,19 @@
  "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
+
 <web-app>
   <display-name>Archetype Created Web Application</display-name>
   <!--<context-param>
     <param-name>contextConfigLocation</param-name>
     <param-value>classpath*:spring-security.xml</param-value>
   </context-param>-->
+
+    <!--报错添加,尽量向前加-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:springmvc.xml</param-value>
+    </context-param>
 
   <!-- 解决post乱码 -->
   <filter>
@@ -22,6 +29,7 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
+
 
   <!--委派过滤器，用于整合其他框架-->
   <filter>
@@ -40,6 +48,10 @@
     <filter-name>CharacterEncodingFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
+    <!--报错添加 添加监听器-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
   <servlet>
     <servlet-name>springmvc</servlet-name>
@@ -51,8 +63,10 @@
     </init-param>
     <load-on-startup>1</load-on-startup>
   </servlet>
+
   <servlet-mapping>
     <servlet-name>springmvc</servlet-name>
     <url-pattern>*.do</url-pattern>
   </servlet-mapping>
+
 </web-app>

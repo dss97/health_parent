@@ -2,7 +2,6 @@ package com.dou;
 
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -13,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class JasperReportTest {
-    @Test
+    //@Test
     public void test1() throws Exception{
         String jrxmlPath =
                 "D:\\develop\\project\\itcast_health\\health_parent\\jasperReportsdemo\\src\\main\\resources\\demo.jrxml";
@@ -73,7 +72,7 @@ public class JasperReportTest {
         JasperExportManager.exportReportToPdfFile(jasperPrint,pdfPath);
     }
 
-    @Test
+    //@Test
     public void test3() throws JRException {
         String jrxmlPath = "D:\\develop\\project\\itcast_health\\health_parent\\jasperReportsdemo\\src\\main\\resources\\demo2.jrxml";
         String jasperPath = "D:\\develop\\project\\itcast_health\\health_parent\\jasperReportsdemo\\src\\main\\resources\\demo2.jasper";

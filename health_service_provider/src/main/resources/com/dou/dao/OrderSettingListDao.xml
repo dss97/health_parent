@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.dou.dao.OrderSettingListDao">
+
+    <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.Order">
+        select id,member_id as memberId,orderDate,orderType,orderStatus,setmeal_id as setmealId from t_order
+        <if test="value !=null and value !='' and value.length>0">
+            where member_id like concat('%',#{value},'%') or setmeal_id like concat('%',#{value},'%') or remark like concat('%',#{value},'%') or station like concat('%',#{value},'%') or id=#{value}
+        </if>
+    </select>
+
+    <select id="findmember" resultType="com.dou.pojo.Member">
+        select * from t_member
+    </select>
+
+    <select id="findsetmeal" resultType="com.dou.pojo.Setmeal">
+        select *
+        from t_setmeal;
+    </select>
+
+    <insert id="add" parameterType="com.dou.pojo.Order">
+        <!--通过mybatis框架提供的selectKey标签获得自增产生的id值-->
+        <selectKey resultType="_integer" order="AFTER" keyProperty="id">
+            select LAST_INSERT_ID()
+        </selectKey>
+        insert into t_order(member_id, orderDate, orderType, orderStatus, setmeal_id)
+        values
+        (#{memberId},#{orderDate},#{orderType},#{orderStatus},#{setmealId})
+    </insert>
+    <!--编辑预约信息-->
+    <update id="edit" parameterType="com.dou.pojo.Order">
+        update t_user
+        <set>
+            <if test="memberId != null">
+                member_id = #{memberId},
+            </if>
+            <if test="orderDate != null">
+                orderDate = #{orderDate},
+            </if>
+            <if test="orderType != null">
+                orderType = #{orderType},
+            </if>
+            <if test="orderStatus != null">
+                orderStatus = #{orderStatus},
+            </if>
+            <if test="setmealId != null">
+                setmeal_id = #{setmealId},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <!--删除预约-->
+    <delete id="delete" parameterType="int">
+        delete from t_order where id=#{id}
+    </delete>
+    <!--查询预约-->
+    <select id="findById" parameterType="int" resultType="com.dou.pojo.Order">
+        select id,member_id as memberId,orderDate,orderType,orderStatus,setmeal_id as setmealId
+        from t_order
+        where id=#{id};
+    </select>
+    <!--回显会员名-->
+    <select id="findmemberById" parameterType="int" resultType="java.lang.String">
+        select name from t_member where id=#{id}
+    </select>
+    <!--回显套餐名-->
+    <select id="findsetmealById" resultType="java.lang.String">
+        select name from t_setmeal where id=#{id}
+    </select>
+</mapper>

@@ -2,9 +2,13 @@ package com.dou.service.impl;
 
 import com.alibaba.dubbo.config.annotation.Service;
 import com.dou.dao.MemberDao;
+import com.dou.entity.PageResult;
+import com.dou.entity.QueryPageBean;
 import com.dou.pojo.Member;
 import com.dou.service.MemberService;
 import com.dou.utils.MD5Utils;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,5 +49,16 @@ public class MemberServiceImpl implements MemberService {
            memberCount.add(count);
         }
     return  memberCount;
+    }
+
+    @Override
+    public PageResult findPage(QueryPageBean queryPageBean) {
+        Integer currentPage = queryPageBean.getCurrentPage();
+        Integer pageSize = queryPageBean.getPageSize();
+        String queryString = queryPageBean.getQueryString();
+        PageHelper.startPage(currentPage, pageSize);
+
+        Page<Member> page=memberDao.selectByCondition(queryString);
+        return new PageResult(page.getTotal(), page.getResult());
     }
 }

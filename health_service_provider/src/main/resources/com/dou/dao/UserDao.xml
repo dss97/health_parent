@@ -7,12 +7,14 @@
     <select id="findByUserId" parameterType="string" resultType="com.dou.pojo.User">
         select  * from t_user where username=#{username}
     </select>
+
     <select id="findByCondition" parameterType="string" resultType="com.dou.pojo.User">
         select * from t_user
         <if test="value !=null and value !='' and value.length>0">
             where username like concat('%',#{value},'%') or telephone like concat('%',#{value},'%') or remark like concat('%',#{value},'%') or station like concat('%',#{value},'%') or id=#{value}
         </if>
     </select>
+
     <select id="findAll" resultType="com.dou.pojo.Role">
         select * from t_role
     </select>

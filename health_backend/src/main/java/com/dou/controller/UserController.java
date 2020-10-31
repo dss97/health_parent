@@ -187,7 +187,7 @@ private UserService userService;
             userService.delete(id);
         } catch (Exception e) {
             e.printStackTrace();
-            return new Result(true, MessageConstant.DELETE_USER_FAIL+"可能存在关联项");
+            return new Result(false, MessageConstant.DELETE_USER_FAIL+"可能存在关联项");
         }
         return new Result(true, MessageConstant.DELETE_USER_SUCCESS);
     }
@@ -200,7 +200,7 @@ private UserService userService;
                 userService.delete(userId);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result(true, MessageConstant.DELETE_USER_FAIL);
+                return new Result(false, MessageConstant.DELETE_USER_FAIL);
             }
         }
         return new Result(true, MessageConstant.DELETE_USER_SUCCESS);

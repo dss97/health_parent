@@ -63,4 +63,30 @@
     <select id="findPerssionCheckItemIdsByRoleId" parameterType="int" resultType="java.lang.Integer">
         select permission_id from t_role_permission where role_id=#{id}
     </select>
+
+    <delete id="deleteMenuAssoication" parameterType="int">
+        delete from t_role_menu where role_id=#{id}
+    </delete>
+
+    <delete id="deletePermissionAssoication" parameterType="int">
+        delete from t_role_permission where role_id=#{id}
+    </delete>
+    <delete id="delete" parameterType="int">
+        delete from t_role where id=#{id}
+    </delete>
+    <update id="edit" parameterType="com.dou.pojo.Role">
+        update t_role
+        <set>
+            <if test="name != null">
+                name = #{name},
+            </if>
+            <if test="keyword != null">
+                keyword = #{keyword},
+            </if>
+            <if test="description != null">
+                description = #{description},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
 </mapper>

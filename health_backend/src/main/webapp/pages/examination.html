@@ -28,7 +28,7 @@
             font-size: 14px;
             color: rgb(96, 98, 102);
             overflow: hidden;
-            flex: 1 1 0%;
+            flex: 110%;
         }
 
         .datatable td, .datatable th {
@@ -47,15 +47,15 @@
 <div id="app">
     <div class="content-header">
         <h1>系统管理
-            <small>用户管理</small>
+            <small>体检上传</small>
         </h1>
         <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
             <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
             <el-breadcrumb-item>系统管理</el-breadcrumb-item>
-            <el-breadcrumb-item>用户管理</el-breadcrumb-item>
+            <el-breadcrumb-item>体检上传</el-breadcrumb-item>
         </el-breadcrumb>
     </div>
-    <div class="app-container">
+   <!-- <div class="app-container">
         <div class="box">
             <div class="filter-container">
                 <el-input placeholder="用户名/手机号" v-model="pagination.queryString" style="width: 200px;"
@@ -98,14 +98,14 @@
                         :total="pagination.total">
                 </el-pagination>
             </div>
-            <!-- 新增标签弹层 -->
+            &lt;!&ndash; 新增标签弹层 &ndash;&gt;
             <div class="add-form">
                 <el-dialog title="编辑用户" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
                     <template>
                         <el-tabs v-model="activeName" type="card">
                             <el-tab-pane label="基本信息" name="first">
                                 <el-form label-position="right" label-width="100px">
-                                   <!-- <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                                   &lt;!&ndash; <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
                                     <el-row>
                                         <el-col :span="12">
                                             <el-form-item label="用户名" prop="username">
@@ -119,7 +119,7 @@
                                             </el-form-item>
                                         </el-col>
                                     </el-row>
-                                </el-form>-->
+                                </el-form>&ndash;&gt;
                                     <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
                                         <el-row>
                                             <el-col :span="12">
@@ -147,8 +147,8 @@
                                         </el-col>
                                         <el-col :span="12">
                                             <el-form-item label="生日">
-                                                <!--<el-input v-model="formData.birthday"/>-->
-                                                <!--value-format="yyyy-MM-dd" 作用解决日期少一天问题 -->
+                                                &lt;!&ndash;<el-input v-model="formData.birthday"/>&ndash;&gt;
+                                                &lt;!&ndash;value-format="yyyy-MM-dd" 作用解决日期少一天问题 &ndash;&gt;
                                                 <el-date-picker value-format="yyyy-MM-dd"
                                                         v-model="formData.birthday"
                                                         type="date"
@@ -210,8 +210,8 @@
                     </div>
                 </el-dialog>
             </div>
-            <!--弹出编辑标签-->
-            <!-- 新增标签弹层 -->
+            &lt;!&ndash;弹出编辑标签&ndash;&gt;
+            &lt;!&ndash; 新增标签弹层 &ndash;&gt;
             <div class="add-form">
                 <el-dialog title="编辑用户" :visible.sync="dialogFormVisible4Edit" v-if="dialogFormVisible4Edit">
                     <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
@@ -246,8 +246,8 @@
                                         </el-col>
                                         <el-col :span="12">
                                             <el-form-item label="生日">
-                                                <!--<el-input v-model="formData.birthday"/>-->
-                                                <!--value-format="yyyy-MM-dd" 作用解决日期少一天问题 -->
+                                                &lt;!&ndash;<el-input v-model="formData.birthday"/>&ndash;&gt;
+                                                &lt;!&ndash;value-format="yyyy-MM-dd" 作用解决日期少一天问题 &ndash;&gt;
                                                 <el-date-picker value-format="yyyy-MM-dd"
                                                                 v-model="formData.birthday"
                                                                 type="date"
@@ -311,8 +311,34 @@
                 </el-dialog>
             </div>
 
-<!--间隔-->
+&lt;!&ndash;间隔&ndash;&gt;
         </div>
+    </div>-->
+    <div>
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
+        您一切都好------------------------------------祝您生活快乐---------------------------------祝您幸福安康
     </div>
 </div>
 <!-- 来必力City版安装代码 -->

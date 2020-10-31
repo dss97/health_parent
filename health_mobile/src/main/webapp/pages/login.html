@@ -89,7 +89,9 @@
                             axios.post("/member/check.do",this.loginInfo).then((res) => {
                                 if(res.data.flag){
                                     //登录成功,跳转到index.html
-                                    window.location.href ="pages/member.html";
+                                   /* window.location.href ="pages/member.html";*/
+                                    window.location.href ="pages/index.html";
+
                                 }else{
                                     //失败，提示失败信息
                             this.$message.error(res.data.message);

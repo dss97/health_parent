@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- 页面meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>传智健康</title>
+    <meta name="description" content="传智健康">
+    <meta name="keywords" content="传智健康">
+    <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="../plugins/elementui/index.css">
+    <link rel="stylesheet" href="../plugins/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- 引入组件库 -->
+    <script type="text/javascript" src="../js/jquery.min.js"></script>
+    <script src="../js/vue.js"></script>
+    <script src="../plugins/elementui/index.js"></script>
+    <script src="../js/axios-0.18.0.js"></script>
+    <script src="../plugins/healthmobile.js"></script>
+    <style>
+        .datatable {
+            position: relative;
+            box-sizing: border-box;
+            -webkit-box-flex: 1;
+            width: 100%;
+            max-width: 100%;
+            font-size: 14px;
+            color: rgb(96, 98, 102);
+            overflow: hidden;
+            flex: 110%;
+        }
+
+        .datatable td, .datatable th {
+            padding: 12px 0;
+            min-width: 0;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            text-overflow: ellipsis;
+            vertical-align: middle;
+            position: relative;
+            text-align: left;
+        }
+    </style>
+</head>
+<body class="hold-transition">
+<div id="app">
+    <div class="content-header">
+        <h1>系统管理
+            <small>预约列表</small>
+        </h1>
+        <el-breadcrumb separator-class="el-icon-arrow-right" class="breadcrumb">
+            <el-breadcrumb-item :to="{ path: '/' }">首页</el-breadcrumb-item>
+            <el-breadcrumb-item>系统管理</el-breadcrumb-item>
+            <el-breadcrumb-item>预约列表</el-breadcrumb-item>
+        </el-breadcrumb>
+    </div>
+    <div class="app-container">
+        <div class="box">
+            <div class="filter-container">
+                <el-input placeholder="会员名/套餐名" v-model="pagination.queryString" style="width: 200px;"
+                          class="filter-item"></el-input>
+                <el-button @click="_findPage()" class="dalfBut">查询</el-button>
+                <el-button type="primary" class="butT" @click="handleCreate()">新建</el-button>
+                <el-button type="primary" class="butT" @click="handleDelAll()">批量删除</el-button>
+            </div>
+            <el-table size="small" current-row-key="id" :data="dataList" stripe highlight-current-row  @selection-change="handleSelectionChange">
+                <el-table-column
+                        type="selection"
+                        width="55">
+                </el-table-column>
+                <el-table-column type="index" align="center" label="序号"></el-table-column>
+                <el-table-column prop="id" label="id" align="center"></el-table-column>
+                <el-table-column prop="memberId" label="会员id" align="center"></el-table-column>
+                <el-table-column prop="orderDate" label="预约日期" align="center"></el-table-column>
+                <el-table-column prop="orderType" label="预约类型" align="center"></el-table-column>
+                <el-table-column prop="orderStatus" label="预约状态" align="center"></el-table-column>
+                <el-table-column prop="setmealId" label="套餐id" align="center"></el-table-column>
+                <el-table-column label="操作" align="center">
+                    <template slot-scope="scope">
+                        <el-button type="primary" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
+                        <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
+            </el-table>
+            <div class="pagination-container">
+                <el-pagination
+                        class="pagiantion"
+                        @current-change="handleCurrentChange"
+                        :current-page="pagination.currentPage"
+                        :page-size="pagination.pageSize"
+                        layout="total, prev, pager, next, jumper"
+                        :total="pagination.total">
+                </el-pagination>
+            </div>
+            <!-- 新增标签弹层 -->
+            <div class="add-form">
+                <el-dialog title="新建预约" :visible.sync="dialogFormVisible" v-if="dialogFormVisible">
+                    <template>
+                        <el-form ref="dataAddForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="选择会员" prop="memberId">
+                                        <el-select v-model="formData.memberId" placeholder="请选择会员">
+                                            <el-option v-for="member in members" :key="member.id" :label="member.name" :value="member.id"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="预约日期" prop="orderDate">
+                                        <!--<el-input v-model="formData.birthday"/>-->
+                                        <!--value-format="yyyy-MM-dd" 作用解决日期少一天问题 -->
+                                        <el-date-picker value-format="yyyy-MM-dd"
+                                                        v-model="formData.orderDate"
+                                                        type="date"
+                                                        placeholder="选择日期">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="预约类型" prop="orderType">
+                                        <el-select v-model="formData.orderType">
+                                            <el-option label="微信预约" value="微信预约"></el-option>
+                                            <el-option label="电话预约" value="电话预约"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="预约状态" prop="orderStatus">
+                                        <el-select v-model="formData.orderStatus">
+                                            <el-option label="未到诊" value="未到诊"></el-option>
+                                            <el-option label="已到诊" value="已到诊"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="选择套餐" prop="setmealId">
+                                        <el-select v-model="formData.setmealId" placeholder="请选择套餐">
+                                            <el-option v-for="setmeal in setmeals" :key="setmeal.id" :label="setmeal.name" :value="setmeal.id"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </template>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible = false">取消</el-button>
+                        <el-button type="primary" @click="handleSave()">确定</el-button>
+                    </div>
+                </el-dialog>
+            </div>
+            <!--弹出编辑标签-->
+            <!-- 新增标签弹层 -->
+            <div class="add-form">
+                <el-dialog title="编辑预约" :visible.sync="dialogFormVisible4Edit" v-if="dialogFormVisible4Edit">
+                    <template>
+                        <el-form ref="dataEditForm" :model="formData" :rules="rules" label-position="right" label-width="100px">
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="选择会员" prop="memberId">
+                                        <el-select v-model="formData.memberId" placeholder="请选择会员">
+                                            <el-option v-for="member in members" :key="member.id" :label="member.name" :value="member.id"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="预约日期" prop="orderDate">
+                                        <!--<el-input v-model="formData.birthday"/>-->
+                                        <!--value-format="yyyy-MM-dd" 作用解决日期少一天问题 -->
+                                        <el-date-picker value-format="yyyy-MM-dd"
+                                                        v-model="formData.orderDate"
+                                                        type="date"
+                                                        placeholder="选择日期">
+                                        </el-date-picker>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="12">
+                                    <el-form-item label="预约类型" prop="orderType">
+                                        <el-select v-model="formData.orderType">
+                                            <el-option label="微信预约" value="微信预约"></el-option>
+                                            <el-option label="电话预约" value="电话预约"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                                <el-col :span="12">
+                                    <el-form-item label="预约状态" prop="orderStatus">
+                                        <el-select v-model="formData.orderStatus">
+                                            <el-option label="未到诊" value="未到诊"></el-option>
+                                            <el-option label="已到诊" value="已到诊"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                            <el-row>
+                                <el-col :span="24">
+                                    <el-form-item label="选择套餐" prop="setmealId">
+                                        <el-select v-model="formData.setmealId" placeholder="请选择套餐">
+                                            <el-option v-for="setmeal in setmeals" :key="setmeal.id" :label="setmeal.name" :value="setmeal.id"></el-option>
+                                        </el-select>
+                                    </el-form-item>
+                                </el-col>
+                            </el-row>
+                        </el-form>
+                    </template>
+                    <div slot="footer" class="dialog-footer">
+                        <el-button @click="dialogFormVisible4Edit = false">取消</el-button>
+                        <el-button type="primary" @click="handleEdit()">确定</el-button>
+                    </div>
+                </el-dialog>
+            </div>
+
+<!--间隔-->
+        </div>
+    </div>
+</div>
+</body>
+
+<script>
+    var vue = new Vue({
+        el: '#app',
+        data: {
+            activeName: 'first',//添加/编辑窗口Tab标签名称
+            members:[],
+            setmeals:[],
+            pagination: {//分页相关属性
+                currentPage: 1,
+                pageSize: 10,
+                total: 100,
+                queryString: null,
+            },
+
+            dataList: [],//列表数据
+            formData: {},//表单数据
+            multipleSelection:[],//删除存入的是每行的json对象
+            //tableData: [],//新增和编辑表单中对应的用户检查项列表数据
+            //checkitemIds: [],//新增和编辑表单中检查项对应的复选框，基于双向绑定可以进行回显和数据提交
+            dialogFormVisible: false,//控制添加窗口显示/隐藏
+            dialogFormVisible4Edit: false,//控制编辑窗口显示/隐藏
+            rules: {//校验规则
+                memberId: [{ required: true, message: '会员名称为必填项', trigger: 'blur' }],
+                orderDate: [{ required: true, message: '预约日期为必填项', trigger: 'blur' }],
+                orderType:[{ required: true, message: '预约类型为必填项', trigger: 'blur'}],
+                orderStatus:[{ required: true, message: '预约状态为必填项', trigger: 'blur'}],
+                setmealId:[{ required: true, message: '预约套餐为必填项', trigger: 'blur'}]
+            }
+        },
+        created() {
+            this.findPage();
+        },
+        methods: {
+            //编辑
+            handleEdit() {
+                //进行表单校验--使用校验规则
+                this.$refs['dataEditForm'].validate((valid)=> {
+                    if (valid) {
+                    //发送ajax请求
+                    axios.post("/ordersettinglist/edit.do",this.formData).then((res) => {
+                        this.dialogFormVisible4Edit = false;
+                        if (res.data.flag) {
+                            this.$message.success(res.data.message);
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    }).finally(() => {
+                        this.findPage();
+                    });
+                }else{
+                        //表单校验不通过
+                        this.$message.error("表单数据校验失败");
+                        return false;
+                        //结束隐藏编辑窗口
+                    }
+            });
+            },
+            //添加
+            handleSave() {
+                //进行表单校验--使用校验规则
+                this.$refs['dataAddForm'].validate((valid)=>{
+                    if (valid) {
+                                //把前端表单和标签信息传递给后端进行数据库保存
+                                axios.post("/ordersettinglist/add.do",this.formData).then((res) => {
+                                    //点击确定添加表单套餐信息,需要关闭表单
+                                    this.dialogFormVisible = false;
+                                    if (res.data.flag) {
+                                        this.$message.success(res.data.message);
+                                    } else {
+                                        this.$message.error(res.data.message);
+                                    }
+                                }).finally(() => {
+                                    this.findPage();
+                                });
+                    }else{
+                        //校验不通过
+                        this.$message.error("数据校验失败，请检查你的输入信息是否正确！");
+                        return  false;
+                    }
+                });
+            },
+			//查询按钮条件分页实现
+            _findPage(){
+                this.pagination.currentPage=1;
+                this.findPage();
+            }
+            ,
+            //分页查询
+            findPage() {
+                //发送ajax请求,提交分页相关请求参数(页码,每页显示记录数,查询条件)
+                var param={
+                    currentPage:this.pagination.currentPage,
+                    pageSize:this.pagination.pageSize,
+                    queryString:this.pagination.queryString
+                };
+                axios.post("/ordersettinglist/findPage.do",param).then((res) =>{
+                    //解析controller响应回的数据,为模型数据赋值
+                    this.pagination.total=res.data.total;//全部页
+                    this.dataList=res.data.rows;//每页信息
+                });
+            },
+            // 重置表单
+            resetForm() {
+                this.checkitemIds=[];
+                this.formData={};
+                this.activeName='first';
+            },
+            // 弹出添加窗口
+            handleCreate() {
+                this.resetForm();
+                this.dialogFormVisible=true;
+                //查询全部会员信息
+                axios.post("/ordersettinglist/findmember.do").then((res)=>{
+                if (res.data.flag){
+                    this.members=res.data.data;
+                } else {
+                    this.$message.error(res.data.message);
+                }
+                });
+                //查询全部套餐信息
+                axios.post("/ordersettinglist/findsetmeal.do").then((res)=>{
+                    if (res.data.flag){
+                        this.setmeals=res.data.data;
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                });
+            },
+            // 弹出编辑窗口
+            handleUpdate(row) {
+                this.resetForm();
+                this.dialogFormVisible4Edit=true;
+                this.activeName='first';
+            axios.post("/ordersettinglist/findById.do?id="+row.id).then((res)=>{
+                if (res.data.flag){
+                    this.formData=res.data.data;
+                        //发送ajax请求
+                        axios.post("/ordersettinglist/findmemberById.do?id="+this.formData.memberId).then((res)=>{
+                            if (res.data.flag){
+                                this.formData.memberId=res.data.data;
+                            } else {
+                                this.$message.error(res.data.message);
+                            }
+                        });
+                    //发送ajax请求
+                    axios.post("/ordersettinglist/findsetmealById.do?id="+this.formData.setmealId).then((res)=>{
+                        if (res.data.flag){
+                            this.formData.setmealId=res.data.data;
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    });
+                    //查询全部会员信息
+                    axios.post("/ordersettinglist/findmember.do").then((res)=>{
+                        if (res.data.flag){
+                            this.members=res.data.data;
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    });
+                    //查询全部套餐信息
+                    axios.post("/ordersettinglist/findsetmeal.do").then((res)=>{
+                        if (res.data.flag){
+                            this.setmeals=res.data.data;
+                        } else {
+                            this.$message.error(res.data.message);
+                        }
+                    });
+                } else {
+                    this.$message.error(res.data.message);
+                }
+            });
+            },
+            //切换页码
+            handleCurrentChange(currentPage) {
+                this.pagination.currentPage=currentPage;
+                this.findPage();
+            },
+			//获取选中行的数据
+            handleSelectionChange(val) {
+                axios.post("/ordersettinglist/findOrderAll.do",val).then((res)=>{
+                    if (res.data.flag){
+                        multipleSelection=res.data.data;
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                });
+            },
+			//批量删除
+            handleDelAll(){
+                //发送ajax请求
+                axios.post("/ordersettinglist/deleteAll.do",multipleSelection).then((res)=>{
+                    if (res.data.flag){
+                        this.findPage();
+                        this.$message.success(res.data.message);
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                });
+            },
+            // 删除
+            handleDelete(row) {
+                //发送ajax请求
+                axios.post("/ordersettinglist/delete.do?id="+row.id).then((res)=>{
+                    if (res.data.flag){
+                        this.findPage();
+                        this.$message.success(res.data.message);
+                    } else {
+                        this.$message.error(res.data.message);
+                    }
+                });
+            }
+        }
+    })
+</script>
+</html>

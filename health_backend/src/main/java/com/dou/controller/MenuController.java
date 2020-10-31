@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/menu")
@@ -86,7 +85,7 @@ public class MenuController {
             e.printStackTrace();
             return new Result(true, MessageConstant.DELETE_MENU_FAIL+"可能存在关联项");
         }
-        return new Result(true, MessageConstant.DELETE_USER_SUCCESS);
+        return new Result(true, MessageConstant.DELETE_MENU_SUCCESS);
     }
 
     //批量删除--涉及的json数据转码
@@ -112,7 +111,7 @@ public class MenuController {
                 menuService.delete(userId);
             } catch (Exception e) {
                 e.printStackTrace();
-                return new Result(true, MessageConstant.DELETE_USER_FAIL);
+                return new Result(false, MessageConstant.DELETE_USER_FAIL);
             }
         }
         return new Result(true, MessageConstant.DELETE_USER_SUCCESS);
